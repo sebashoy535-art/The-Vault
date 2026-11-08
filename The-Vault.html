@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Vault | Historia - Literatura - Arte</title>
+  <style>
+    :root {
+      --fondo: #08111f;
+      --panel: #101e32;
+      --panel-claro: #162943;
+      --texto: #f4f7fb;
+      --suave: #a9b8cc;
+      --azul: #38bdf8;
+      --violeta: #8b5cf6;
+      --borde: rgba(255,255,255,.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    .contenedor { width: min(1120px, 90%); margin: auto; }
+    header {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(8,17,31,.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--borde);
+    }
+    .barra { min-height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .logo { font-size: 1.45rem; font-weight: 800; letter-spacing: .5px; }
+    .logo span { color: var(--azul); }
+    nav { display: flex; gap: 24px; align-items: center; }
+    nav a { color: var(--suave); font-size: .95rem; transition: color .25s; }
+    nav a:hover { color: var(--azul); }
+    .menu-btn { display: none; border: 1px solid var(--borde); background: var(--panel); color: white; padding: 8px 12px; border-radius: 9px; cursor: pointer; }
+
+    .hero {
+      min-height: 590px; display: grid; grid-template-columns: 1.1fr .9fr;
+      align-items: center; gap: 45px; padding: 75px 0;
+      background: radial-gradient(circle at 80% 35%, rgba(56,189,248,.13), transparent 32%);
+    }
+    .etiqueta { color: var(--azul); text-transform: uppercase; letter-spacing: 2px; font-size: .8rem; font-weight: bold; }
+    h1 { font-size: clamp(2.6rem, 6vw, 4.7rem); line-height: 1.06; margin: 16px 0 22px; }
+    h1 span { color: var(--azul); }
+    .hero p { color: var(--suave); max-width: 590px; font-size: 1.08rem; }
+    .acciones { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 30px; }
+    .boton { display: inline-block; border: 0; cursor: pointer; border-radius: 10px; padding: 13px 20px; font-weight: 700; transition: transform .25s, box-shadow .25s; }
+    .boton:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(56,189,248,.2); }
+    .primario { color: #06111e; background: linear-gradient(100deg, var(--azul), #7dd3fc); }
+    .secundario { border: 1px solid var(--borde); background: var(--panel); color: var(--texto); }
+
+    /* NUEVAS ANIMACIONES: IMAGEN CENTRAL Y DOS IMÁGENES EN ÓRBITA */
+    .ilustracion {
+      min-height: 400px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      border: 1px solid var(--borde);
+      border-radius: 30px;
+      background: linear-gradient(145deg, #000000, #000000);
+      overflow: hidden;
+    }
+    .escenario-orbital {
+      width: 340px;
+      height: 340px;
+      max-width: 100%;
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+    .escenario-orbital::before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      max-width: 90%;
+      max-height: 90%;
+      border: 1px dashed rgba(56,189,248,.35);
+      border-radius: 50%;
+    }
+    /* Animación 1: la imagen gira sobre su propio eje */
+    .imagen-central {
+      width: 135px;
+      height: 135px;
+      position: absolute;
+      z-index: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+    }
+    .imagen-central img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      animation: giroCentral 5s linear infinite;
+    }
+    @keyframes giroCentral {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+  }
+}    /* Imágenes 2 y 3: giran alrededor de la imagen central */
+    .orbita {
+      position: absolute;
+      width: 72px;
+      height: 72px;
+      top: 50%;
+      left: 50%;
+      margin: -36px;
+      border-radius: 50%;
+    }
+    .orbita img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+    .segunda {
+      z-index: 2;
+      animation: orbitar 8s linear infinite;
+    }
+    .tercera {
+      z-index: 3;
+      animation: orbitar 8s linear infinite;
+      animation-delay: -4s;
+    }
+    @keyframes orbitar {
+      from {
+        transform: rotate(0deg) translateX(140px) rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg) translateX(140px) rotate(-360deg);
+      }
+    }
+
+    section { padding: 85px 0; }
+    .encabezado { text-align: center; max-width: 680px; margin: 0 auto 42px; }
+    .encabezado h2 { font-size: clamp(2rem, 4vw, 2.8rem); margin: 9px 0; }
+    .encabezado p { color: var(--suave); }
+    .rejilla { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .tarjeta { background: var(--panel); border: 1px solid var(--borde); padding: 25px; border-radius: 18px; transition: transform .25s, border-color .25s, background-color .25s; }
+    .tarjeta:hover { transform: translateY(-7px); border-color: rgba(56,189,248,.55); }
+    .icono { font-size: 2rem; margin-bottom: 13px; }
+    .tarjeta h3 { margin-bottom: 9px; }
+    .tarjeta p { color: var(--suave); }
+    .servicios { background: #0b1728; }
+    .productos { background: #0b1728; }
+    .btn-whatsapp { color: #062014; background: #25d366; }
+    .btn-whatsapp:hover { box-shadow: 0 10px 25px rgba(37,211,102,.22); }
+    .servicio { min-height: 205px; }
+    .servicio .icono { color: var(--azul); }
+    .producto { display: flex; flex-direction: column; gap: 12px; }
+    .imagen-creador, .imagen-producto {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid var(--borde);
+      background: #0a1627;
+    }
+    .galeria-producto { display: flex; flex-direction: column; gap: 9px; }
+    .imagen-producto { display: block; width: 100%; height: 410px; object-fit: cover; }
+    .miniaturas { display: flex; gap: 7px; overflow-x: auto; padding: 2px 1px 7px; }
+    .miniatura { flex: 0 0 62px; width: 62px; height: 58px; padding: 0; border: 2px solid transparent; border-radius: 8px; overflow: hidden; background: #0a1627; cursor: pointer; }
+    .miniatura img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .miniatura.activa { border-color: var(--azul); }
+    .producto .precio { color: var(--azul); font-size: 1.25rem; font-weight: 800; margin-top: auto; }
+    .producto button { align-self: flex-start; }
+    .formulario-contenedor { display: grid; grid-template-columns: .8fr 1.2fr; gap: 35px; align-items: start; }
+    .texto-contacto p { color: var(--suave); margin-top: 12px; }
+    form { background: var(--panel); border: 1px solid var(--borde); border-radius: 18px; padding: 28px; }
+    label { display: block; margin: 12px 0 6px; font-weight: 700; }
+    input, textarea { width: 100%; padding: 13px; color: white; background: #0a1627; border: 1px solid var(--borde); border-radius: 9px; outline: none; }
+    input:focus, textarea:focus { border-color: var(--azul); }
+    textarea { min-height: 120px; resize: vertical; }
+    form button { margin-top: 17px; }
+    #mensaje { margin-top: 14px; color: #86efac; min-height: 24px; }
+    #mensaje.error { color: #fca5a5; }
+    form button:disabled { opacity: .65; cursor: wait; transform: none; }
+    footer { border-top: 1px solid var(--borde); padding: 25px 0; color: var(--suave); text-align: center; }
+
+    @media (max-width: 760px) {
+      .menu-btn { display: block; }
+      nav { display: none; position: absolute; top: 74px; left: 0; right: 0; padding: 20px 5%; background: #0b1728; flex-direction: column; align-items: flex-start; }
+      nav.abierto { display: flex; }
+      .hero, .formulario-contenedor { grid-template-columns: 1fr; }
+      .hero { padding-top: 55px; }
+      .ilustracion { min-height: 340px; }
+      .escenario-orbital { transform: scale(.85); }
+      .rejilla { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .imagen-central img, .segunda, .tercera { animation-duration: 0.01ms; animation-iteration-count: 1; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVEGACIÓN FUNCIONAL -->
+  <header>
+    <div class="contenedor barra">
+      <a class="logo" href="#inicio">The<span>-Vault</span></a>
+      <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
+      <nav id="navegacion">
+        <a href="#inicio">Inicio</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#creadores">Creadores</a>
+        <a href="#productos">Productos</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="contenedor hero" id="inicio">
+      <div>
+        <span class="etiqueta">Historietas y Artes</span>
+        <h1>Ayudamos a <br><span>que no te aburras.</span></h1>
+        <p>En The Vault te ayudamos a que no te aburras y entretenerte en todo el tiempo que no haces nada.</p>
+        <div class="acciones">
+          <a class="boton primario" href="#servicios">Conocer servicios</a>
+          <a class="boton secundario" href="#contacto">Contáctanos</a>
+        </div>
+      </div>
+
+      <!-- ESPACIO PARA LAS TRES IMÁGENES ANIMADAS -->
+      <div class="ilustracion" aria-label="Tres imágenes animadas: una central y dos en órbita">
+        <div class="escenario-orbital">
+          <!-- Cambia animacion1.jpg por tu imagen central -->
+          <div class="imagen-central">
+            <img src="https://i.pinimg.com/474x/6a/d7/87/6ad7873cb86397ae15c348668861049c.jpg" alt="Imagen central en rotación">
+          </div>
+
+          <!-- Cambia animacion2.jpg por la segunda imagen orbital -->
+          <div class="orbita segunda">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKEDgD-nog1gcYdq6GYEr_C50Y-7L7ok-sXifx6alcxmq-l_FDG1AS6Dfx&s=10" alt="Segunda imagen orbitando">
+          </div>
+
+          <!-- Cambia animacion3.jpg por la tercera imagen orbital -->
+          <div class="orbita tercera">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeIckXqrLLxlKwjVNhI5uPooPxxWYwPcGWHFo9YM9w1Q&s=10" alt="Tercera imagen orbitando delante">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="servicios" id="servicios">
+      <div class="contenedor">
+        <div class="encabezado">
+          <span class="etiqueta">Lo que hacemos</span>
+          <h2>Nuestros servicios</h2>
+        </div>
+        <div class="rejilla">
+          <article class="tarjeta servicio">
+            <div class="icono">🥡</div>
+            <h3>Hacemos pedidos!!</h3>
+            <p>Si no lo tenemos y lo quieres buscamos, cotizamos y te lo traemos.</p>
+          </article>
+          <article class="tarjeta servicio">
+            <div class="icono">🛠️</div>
+            <h3>Te recomendamos!!</h3>
+            <p>Te recomendamos con que puedes empezar si no saber que leer.</p>
+          </article>
+          <article class="tarjeta servicio">
+            <div class="icono">🌐</div>
+            <h3>Llevamos tu pedido!!</h3>
+            <p>Te llevamos tu pedido gratuito si vas por el centro.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="creadores">
+      <div class="contenedor">
+        <div class="encabezado">
+          <span class="etiqueta">Nuestro equipo</span>
+          <h2>Nuestros creadores</h2>
+          <p>Conoce a las tres personas que forman parte de este proyecto.</p>
+        </div>
+        <div class="rejilla" id="listaCreadores"></div>
+      </div>
+    </section>
+
+    <section class="productos" id="productos">
+      <div class="contenedor">
+        <div class="encabezado">
+          <span class="etiqueta">Catálogo</span>
+          <h2>Productos destacados</h2>
+          <p>Unos productos de buena calidad.</p>
+        </div>
+        <div class="rejilla" id="listaProductos"></div>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <div class="contenedor formulario-contenedor">
+        <div class="texto-contacto">
+          <span class="etiqueta">Hablemos</span>
+          <h2>¿Necesitas ayuda o hacer un pedido?</h2>
+          <p>Completa el formulario y nuestro equipo se pondrá en contacto contigo.</p>
+          <p>✉ sebashoy535@gmail.com</p>
+          <p>📍 Santa Cruz, Bolivia</p>
+        </div>
+
+        <!-- FORMULARIO: ENVÍA LOS DATOS A TRAVÉS DE FORMSUBMIT -->
+        <form id="formContacto">
+          <h3>Formulario de contacto</h3>
+          <label for="nombre">Nombre completo</label>
+          <input id="nombre" name="name" type="text" placeholder="Escribe tu nombre" autocomplete="name" required>
+
+          <label for="correo">Correo electrónico</label>
+          <input id="correo" name="email" type="email" placeholder="ejemplo@correo.com" autocomplete="email" required>
+
+          <label for="consulta">¿En qué podemos ayudarte?</label>
+          <textarea id="consulta" name="message" placeholder="Escribe tu consulta..." required></textarea>
+
+          <button class="boton primario" type="submit" id="btnEnviar">Enviar consulta</button>
+          <p id="mensaje" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="contenedor">© 2026 The Vault. Proyecto educativo de desarrollo web.</div>
+  </footer>
+
+  <script>
+    // MANEJO DE COLECCIONES
+    const creadores = [
+      {
+        nombre: "Sebastian Herrera Vidal",
+        descripcion: "Experto en Historietas Heroes.",
+        imagen: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhXmzACcB_YYtq7GLbNlpMsqqnmDb8VSniVyvaF5LT0uKEJBcqVokFJ4cCGgnRqHxc4CW5km_4Khe9V6DL0cBriGjkAHra1Jc98tXgWXa9gnkdO_MHGZ_As1wphsht0Wes-GWCSIPXb15UMoUwYS5uZ4_u-DlXZOdZZn5kzoE5L9Gill5m4tC7vRDxS6Xc/s1600/Foto%20de%20Sebasti%C3%A1n%20Vidal.jpg"
+      },
+      {
+        nombre: "Alejandro Castillo",
+        descripcion: "Experto en Arte.",
+        imagen: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiBGvZMwc4pcuTtHJpvBtpN3xUvRJFU55jGd01USppYPpYMkilFxZS8ZEEoXzZf_HARdBwX-o02zghtWpRM88AFHgBbKAB3gC-JwrOnjN-I81FgL92kL7QU3sgLF1b3SLUaz8OKWIRINWuSkGdmnFh9V1Xqmqt7CC3dWB0OiUYoIow2Qs5pc5t4rmVB8aY/s1600/Foto%20de%20Sebasti%C3%A1n%20Vidal%20%281%29.jpg"
+      },
+      {
+        nombre: "Eliot Donova",
+        descripcion: "Es el jefe.",
+        imagen: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4jEV3j_iuk0OkPnuitaiDu0p2BnRLBAZ3nKs1vPfv1Wf2TSLuqF6WSAVgaMMcBsnLJhIZ3TaVwt4OtB845eEyseStBs6I5ef2FXQNNf_45vCfSGxQToVgV3rhaUa4_WBUFaHE3hXC2uEaAhWWwanlDQLmf8B7pwUJdQI6C4-vX5t4B7SJhzmu8MnWBdA/s1600/1793991003130.jpg"
+      }
+    ];
+
+    // PRODUCTOS
+    const productos = [
+      {
+        nombre: "Condorito de coleccion Nº7 de Año 2024",
+        detalle: "Historieta de comedia.",
+        precio: 20,
+        imagenes: [
+          "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjU33SVId1KKAkrTcTSmBH7RUNhhRFuZYL1_lNP6GSHgtlOgrE513cUiKF9X5d-6RiOvjsc6AivMIbyemYj-A4B8OShapKz6G0WbjUYJ-rBpZfx6nXJgLjUz3f-zYo8p-yAZKIJqwRW1fGEgitrjoqgsNPWUu_hf5MpxAPfvlZ1UukM3WOEDT20FwfyeGE/s1600/image.png",
+          "imagenes/laptop-2.jpg",
+          "imagenes/laptop-3.jpg",
+          "imagenes/laptop-4.jpg"
+        ]
+      },
+      {
+        nombre: "Capitan America ",
+        detalle: "Misterio y Posibilidades.",
+        precio: 25,
+        imagenes: ["https://entelequia.com.ar/storage/product_arch/2019/10/newxmen13-74.webp",
+         "imagenes/monitor-2.jpg",
+         "imagenes/monitor-3.jpg",
+         "imagenes/monitor-4.jpg"]
+      },
+      {
+        nombre: "Los Nuevos Vengadores",
+        detalle: "Un inicio despues de un desastre.",
+        precio: 45,
+        imagenes: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu0Xyz_HSU_wFIgYU0AYILpgT9FTlLM78uw_vuUFB63XTo-926wjUgbop8&s=10",
+        "imagenes/teclado-2.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjTeeFq2_-Nt-waUT7TCILvGUeb90xnWLd8S_IBBrGXw&s=10",
+        "imagenes/teclado-4.jpg"]
+      },
+      {
+        nombre: "El Asombroso Spiderman",
+        detalle: "Continueidad de la historia de un personaje de su vida personal.",
+        precio: 70,
+        imagenes: ["https://http2.mlstatic.com/D_NQ_NP_713132-MLU75816253656_042024-O.webp",
+          "imagenes/producto4-2.jpg",
+          "imagenes/producto4-3.jpg",
+          "imagenes/producto4-4.jpg"]
+      },
+      {
+        nombre: "Wonder Woman",
+        detalle: "Continuacion de la historia de Wonder Woman.",
+        precio: 25,
+        imagenes: ["https://http2.mlstatic.com/D_NQ_NP_961757-MLA82090089204_022025-O.webp",
+          "imagenes/producto5-2.jpg",
+          "imagenes/producto5-3.jpg",
+          "imagenes/producto5-4.jpg"]
+      },
+      {
+        nombre: "Batman",
+        detalle: "Historia de un nuevo universo de Batman.",
+        precio: 25,
+        imagenes: ["https://images.cdn3.buscalibre.com/fit-in/660x660/a3/a1/a3a1236bfd96ac017b30ca563fbeeb8c.jpg",
+          "imagenes/producto6-2.jpg",
+          "imagenes/producto6-3.jpg",
+          "imagenes/producto6-4.jpg"]
+      },
+      {
+        nombre: "Robin",
+        detalle: "Historia que muestra la vida personal de Tim Drake tercer Robin.",
+        precio: 25,
+        imagenes: ["https://s3.amazonaws.com/comicgeeks/comics/covers/large-5924396.jpg?1756380402",
+          "imagenes/producto7-2.jpg",
+          "imagenes/producto7-3.jpg",
+          "imagenes/producto7-4.jpg"]
+      },
+      {
+        nombre: "Batman",
+        detalle: "Una Historia de batman contra el hombre que rie.",
+        precio: 25,
+        imagenes: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3fD3siMdb1rWAGpF7E0BJYidMYEDM8M9Eg0PKKe03Mw&s=10",
+          "imagenes/producto8-2.jpg",
+          "imagenes/producto8-3.jpg",
+          "imagenes/producto8-4.jpg"]
+      },
+      {
+        nombre: "Batman Hora-Cero",
+        detalle: "Historia de tiempo confuza entre Pasado-Presente-Futuro.",
+        precio: 40,
+        imagenes: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ8XQvCbzjuPE2x806gvaiQxaurZcAi7nkFE_vKMXSeQ&s=10",
+          "imagenes/producto9-2.jpg",
+          "imagenes/producto9-3.jpg",
+          "imagenes/producto9-4.jpg"]
+      }
+    ];
+
+    // USO DE JSON
+    const creadoresJSON = JSON.stringify(creadores);
+    const creadoresRecuperados = JSON.parse(creadoresJSON);
+    const productosJSON = JSON.stringify(productos);
+    const productosRecuperados = JSON.parse(productosJSON);
+
+    // USO DEL DOM
+    const listaCreadores = document.getElementById("listaCreadores");
+    const listaProductos = document.getElementById("listaProductos");
+
+    creadoresRecuperados.forEach((creador) => {
+      listaCreadores.innerHTML += `
+        <article class="tarjeta">
+          <img class="imagen-creador" src="${creador.imagen}" alt="Fotografía de ${creador.nombre}">
+          <h3>${creador.nombre}</h3>
+          <p>${creador.descripcion}</p>
+        </article>`;
+    });
+
+    productosRecuperados.forEach((producto, indiceProducto) => {
+      const imagenes = producto.imagenes || [producto.imagen];
+      const imagenPrincipal = imagenes[0];
+      const miniaturas = imagenes.map((imagen, indiceImagen) => `
+        <button class="miniatura ${indiceImagen === 0 ? "activa" : ""}" type="button"
+          data-producto="${indiceProducto}" data-imagen="${indiceImagen}"
+          aria-label="Ver imagen ${indiceImagen + 1} de ${producto.nombre}">
+          <img src="${imagen}" alt="Vista ${indiceImagen + 1} de ${producto.nombre}">
+        </button>`).join("");
+
+      const precioHTML = Number(producto.precio) > 0
+        ? `<p class="precio">Bs ${Number(producto.precio).toLocaleString("es-BO")}</p>`
+        : `<p class="precio">Consultar precio</p>`;
+
+      listaProductos.innerHTML += `
+        <article class="tarjeta producto">
+          <div class="galeria-producto">
+            <img class="imagen-producto" id="imagenProducto${indiceProducto}"
+              src="${imagenPrincipal}" alt="Imagen de ${producto.nombre}">
+            <div class="miniaturas">${miniaturas}</div>
+          </div>
+          <h3>${producto.nombre}</h3>
+          <p>${producto.detalle}</p>
+          ${precioHTML}
+          <button class="boton btn-whatsapp btn-consultar" type="button" data-indice="${indiceProducto}">Consultar por WhatsApp</button>
+        </article>`;
+    });
+
+    // EVENTOS: MINIATURAS Y CONSULTAS POR WHATSAPP
+    const numeroWhatsApp = "59175530380";
+
+    listaProductos.addEventListener("click", (evento) => {
+      const miniatura = evento.target.closest(".miniatura");
+
+      if (miniatura) {
+        const indiceProducto = Number(miniatura.dataset.producto);
+        const indiceImagen = Number(miniatura.dataset.imagen);
+        const productoGaleria = productosRecuperados[indiceProducto];
+        const imagenesGaleria = productoGaleria?.imagenes || [];
+
+        if (imagenesGaleria[indiceImagen]) {
+          document.getElementById(`imagenProducto${indiceProducto}`).src = imagenesGaleria[indiceImagen];
+          miniatura.parentElement.querySelectorAll(".miniatura").forEach((boton) => boton.classList.remove("activa"));
+          miniatura.classList.add("activa");
+        }
+        return;
+      }
+
+      const botonWhatsApp = evento.target.closest(".btn-consultar");
+      if (!botonWhatsApp) return;
+
+      const indice = Number(botonWhatsApp.dataset.indice);
+      const productoSeleccionado = productosRecuperados[indice];
+      if (!productoSeleccionado) return;
+
+      const precioTexto = Number(productoSeleccionado.precio) > 0
+        ? `Bs ${productoSeleccionado.precio}`
+        : "precio por confirmar";
+
+      const mensajeWhatsApp = `Hola, estoy interesado en el producto ${productoSeleccionado.nombre}. ¿Podrían darme más información sobre su precio (${precioTexto})?`;
+      const enlaceWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensajeWhatsApp)}`;
+      window.open(enlaceWhatsApp, "_blank", "noopener,noreferrer");
+    });
+
+    // EVENTOS MOUSEOVER Y MOUSEOUT EN LAS TARJETAS DE CREADORES
+    listaCreadores.addEventListener("mouseover", (evento) => {
+      const tarjeta = evento.target.closest(".tarjeta");
+      if (tarjeta) tarjeta.style.backgroundColor = "#18314e";
+    });
+
+    listaCreadores.addEventListener("mouseout", (evento) => {
+      const tarjeta = evento.target.closest(".tarjeta");
+      if (tarjeta && !tarjeta.contains(evento.relatedTarget)) {
+        tarjeta.style.backgroundColor = "";
+      }
+    });
+
+    // FORMULARIO: ENVÍO MEDIANTE FORMSUBMIT
+    document.getElementById("formContacto").addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+
+      const formulario = evento.currentTarget;
+      const boton = document.getElementById("btnEnviar");
+      const mensaje = document.getElementById("mensaje");
+      mensaje.classList.remove("error");
+
+      const datos = {
+        name: document.getElementById("nombre").value.trim(),
+        email: document.getElementById("correo").value.trim(),
+        message: document.getElementById("consulta").value.trim(),
+        _subject: "Nueva consulta - The Vault",
+        _template: "table"
+      };
+
+      if (!datos.name || !datos.email || !datos.message) {
+        mensaje.textContent = "Completa todos los campos antes de enviar.";
+        mensaje.classList.add("error");
+        return;
+      }
+
+      boton.disabled = true;
+      boton.textContent = "Enviando...";
+      mensaje.textContent = "Enviando tu consulta...";
+
+      try {
+        const respuesta = await fetch("https://formsubmit.co/ajax/sebashoy535@gmail.com", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(datos)
+        });
+
+        const resultado = await respuesta.json();
+
+        if (!respuesta.ok || resultado.success === false || resultado.success === "false") {
+          throw new Error(resultado.message || "El servicio no pudo aceptar el mensaje.");
+        }
+
+        mensaje.textContent = "¡Gracias, " + datos.name + "! Tu consulta fue enviada. Revisa tu correo si es la primera vez.";
+        formulario.reset();
+      } catch (error) {
+        console.error("Error al enviar el formulario:", error);
+        mensaje.textContent = "No se pudo enviar la consulta. Comprueba tu conexión e inténtalo nuevamente.";
+        mensaje.classList.add("error");
+      } finally {
+        boton.disabled = false;
+        boton.textContent = "Enviar consulta";
+      }
+    });
+
+    // MENÚ MÓVIL
+    document.getElementById("menuBtn").addEventListener("click", () => {
+      document.getElementById("navegacion").classList.toggle("abierto");
+    });
+
+    document.querySelectorAll("#navegacion a").forEach((enlace) => {
+      enlace.addEventListener("click", () => {
+        document.getElementById("navegacion").classList.remove("abierto");
+      });
+    });
+  </script>
+</body>
+</html>
